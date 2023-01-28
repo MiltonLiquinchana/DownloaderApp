@@ -21,26 +21,6 @@ public class DownloaderController {
 
     @PostMapping("download")
     public String downloadStart(@RequestBody DownloadRequest downloadRequest) throws IOException, URISyntaxException {
-//        long existingFileSize = 0L;
-//        URLConnection downloadFileConnection = new URI(downloadRequest.getUrlRequest()).toURL()
-//                .openConnection();
-//        Path path=Path.of(downloadRequest.getFileOutputPath(),downloadRequest.getFileName());
-//
-//        if (Files.exists(path) && downloadFileConnection instanceof HttpURLConnection) {
-//            HttpURLConnection httpFileConnection = (HttpURLConnection) downloadFileConnection;
-//
-//            HttpURLConnection tmpFileConn = (HttpURLConnection) new URI(downloadRequest.getUrlRequest()).toURL()
-//                    .openConnection();
-//            tmpFileConn.setRequestMethod("HEAD");
-//            long fileLength = tmpFileConn.getContentLengthLong();
-//            existingFileSize = Files.size(path);
-//
-//            if (existingFileSize < fileLength) {
-//                httpFileConnection.setRequestProperty("Range", "bytes=" + existingFileSize + "-" + fileLength);
-//            } else {
-//                throw new IOException("File Download already completed.");
-//            }
-//        }
         URL url=new URL(downloadRequest.getUrlRequest());
         URLConnection connection = url.openConnection();
         Path path = Path.of(downloadRequest.getFileOutputPath(), downloadRequest.getFileName());

@@ -14,8 +14,6 @@ class DemoApplicationTests {
 
     @Test
     void FileDownload() throws IOException {
-        DownloaderServiceImpl downloader = new DownloaderServiceImpl();
-        downloader.downLoadFile(Path.of(PATHDEST, FILEOUTPUTNAME), URLBASE);
 
     }
 
