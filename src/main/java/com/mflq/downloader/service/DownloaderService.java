@@ -3,12 +3,12 @@ package com.mflq.downloader.service;
 import org.springframework.scheduling.annotation.Async;
 
 import java.io.IOException;
+import java.net.URLConnection;
 import java.nio.file.Path;
-import java.util.concurrent.CompletableFuture;
 
 public interface DownloaderService {
     @Async("asyncExecutor")
-    CompletableFuture<Boolean> downLoadFile(Path localPath, String remoteURL) throws IOException;
+    void downLoadFile(Path localPath, URLConnection urlConnection,long localFileSize) throws IOException;
 
-    void llamada(long sizeRead, double progress);
+    void notifyDownloadProgres(long sizeRead, double progress);
 }

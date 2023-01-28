@@ -41,16 +41,11 @@ public class RBCWrapper implements ReadableByteChannel {
             this.sizeRead += n;
 
             double progress = this.sizeFileOnline > 0 ? (((double) this.sizeRead / (double) this.sizeFileOnline) * 100.0) : -1.0;
-            this.delegate.llamada(this.sizeRead, progress);
-//            this.progressCallBackService.rbcProgressCallback(this.sizeRead, progress);
-//            System.out.println("******************************************************************************");
+            this.delegate.notifyDownloadProgres(this.sizeRead, progress);
+//            this progressCallBackService rbcProgressCallback(this.sizeRead, progress)
         }
         return n;
     }
-
-  /*  public long getReadSoFar() {
-        return this.sizeRead;
-    }*/
 
 
 }

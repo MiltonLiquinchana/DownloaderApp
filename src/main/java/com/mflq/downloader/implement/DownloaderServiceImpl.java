@@ -26,44 +26,26 @@ public class DownloaderServiceImpl implements DownloaderService {
     private ProgressCallBackService progressCallBackService;
 
     @Override
-    public CompletableFuture<Boolean> downLoadFile(Path path, String remoteURL) throws IOException {
+    public void downLoadFile(Path path, URLConnection urlConnection,long localFileSize) throws IOException {
 
-        URLConnection connection = new URL(remoteURL).openConnection();
-        long localFileSize = 0;
 
-        if (Files.exists(path)) {
-
-            localFileSize = Files.size(path);
-
-            if (localFileSize == connection.getContentLength()) {
-                log.warn("El archivo ya fue descargado");
-
-                return CompletableFuture.completedFuture(true);
-            }
-            connection.setRequestProperty("Range", "bytes=" + localFileSize + "-");
-
-        } else {
-            Files.createFile(path);
-        }
 
         log.info("Download initialized");
         try (
-                ReadableByteChannel rbc = new RBCWrapper(Channels.newChannel(connection.getInputStream()), localFileSize, (connection.getContentLength() + localFileSize), this);
+                ReadableByteChannel rbc = new RBCWrapper(Channels.newChannel(urlConnection.getInputStream()), localFileSize, (urlConnection.getContentLength() + localFileSize), this);
                 FileOutputStream fos = new FileOutputStream(path.toString(), true);
                 FileChannel fileChannel = fos.getChannel()
         ) {
             fileChannel.transferFrom(rbc, 0, Long.MAX_VALUE);
-            return CompletableFuture.completedFuture(true);
 
         } catch (IOException e) {
             log.error("Uh oh: " + e);
-            return CompletableFuture.completedFuture(false);
         }
     }
 
 
     @Override
-    public void llamada(long sizeRead, double progress) {
+    public void notifyDownloadProgres(long sizeRead, double progress) {
         this.progressCallBackService.rbcProgressCallback(sizeRead, progress);
     }
 
