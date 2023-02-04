@@ -20,7 +20,7 @@ public class WebSocketController {
     @MessageMapping("/message")
     public void sendNotification(@Payload FileStatus fileStatus) {
         log.info("Enviando notificación to springClient");
-        simpMessagingTemplate.convertAndSendToUser("springClient", "/queue/notification", fileStatus);
+        simpMessagingTemplate.convertAndSendToUser("stompWebClient", "/queue/notification", fileStatus);
 
     }
 }
