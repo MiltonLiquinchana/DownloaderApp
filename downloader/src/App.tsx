@@ -4,7 +4,8 @@ function App() {
 
   return (
     <div >
-      <DownloaderComponent/>
+      <DownloaderComponent clientName='stomp'/>
+      {/* <DownloaderComponent clientName='stompClient'/> */}
     </div>
   )
 }

@@ -10,6 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FileStatus {
+    private String from;
+    private String to;
     private long sizeRead;
     private double progress;
 

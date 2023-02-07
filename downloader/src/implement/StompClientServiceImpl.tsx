@@ -7,6 +7,7 @@ export default class StompClientServiceImpl implements StompClientService {
   private client: Client | null;
   private setDownloadState:Function;
 
+
   constructor(setDownloadState:Function) {
     this.client = null;
     this.setDownloadState=setDownloadState;

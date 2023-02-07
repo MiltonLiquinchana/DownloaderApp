@@ -19,8 +19,8 @@ public class WebSocketController {
      * sería un agregado a la ruta*/
     @MessageMapping("/message")
     public void sendNotification(@Payload FileStatus fileStatus) {
-        log.info("Enviando notificación to springClient");
-        simpMessagingTemplate.convertAndSendToUser("stompWebClient", "/queue/notification", fileStatus);
+        log.info("Enviando notificación to: {}", fileStatus.getTo());
+        simpMessagingTemplate.convertAndSendToUser(fileStatus.getTo(), "/queue/notification", fileStatus);
 
     }
 }

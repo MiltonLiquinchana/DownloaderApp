@@ -2,10 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import "../css/Downloader.css";
 import StompClientServiceImpl from "../implement/StompClientServiceImpl";
 import StompClientService from "../service/StompClientService";
-interface stylos {
-  width: string | number;
+interface props{
+  clientName:string;
 }
-export default function DownloaderComponent() {
+
+export default function DownloaderComponent({clientName}:props) {
   let stompClient: StompClientService;
   /**Creamos una referencia hacia el progres */
   const [downloadState, setDownloadState] = useState<string | number>('0%');
@@ -16,7 +17,7 @@ export default function DownloaderComponent() {
   }, []);
   /**Creamos una instancia del cliente */
 
-  const styles: stylos = { width: downloadState };
+  const styles = { width: downloadState };
 
   return (
     <div className="downloader">
@@ -37,7 +38,7 @@ export default function DownloaderComponent() {
         type="button"
         className="btn btn-success"
         onClick={() => {
-          stompClient.connect("stompWebClient");
+          stompClient.connect(clientName);
         }}
       >
         StartDownloader
