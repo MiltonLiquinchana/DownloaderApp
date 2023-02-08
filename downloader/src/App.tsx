@@ -5,7 +5,7 @@ function App() {
   return (
     <div >
       <DownloaderComponent clientName='stomp'/>
-      {/* <DownloaderComponent clientName='stompClient'/> */}
+      <DownloaderComponent clientName='stompClient'/>
     </div>
   )
 }
