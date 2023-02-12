@@ -1,5 +1,5 @@
 {
-  "name": "downloader",
+  "name": "downloader-client-react",
   "private": true,
   "version": "0.0.0",
   "type": "module",

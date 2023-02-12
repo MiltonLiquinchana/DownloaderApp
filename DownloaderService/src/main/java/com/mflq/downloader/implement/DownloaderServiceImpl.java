@@ -7,8 +7,12 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Path;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.stereotype.Service;
@@ -16,14 +20,17 @@ import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 
+import com.mflq.downloader.dto.DownloadContructorRequest;
+import com.mflq.downloader.dto.DownloadContructorResponse;
+import com.mflq.downloader.dto.DownloadRequest;
+import com.mflq.downloader.dto.DownloadResponse;
 import com.mflq.downloader.handler.MyStompSessionHandler;
-import com.mflq.downloader.model.DownloadRequest;
-import com.mflq.downloader.model.FileStatus;
+import com.mflq.downloader.model.DownloadFile;
+import com.mflq.downloader.repository.DownloadFileRepository;
 import com.mflq.downloader.service.DownloaderService;
 import com.mflq.downloader.service.ProgressCallBackService;
 import com.mflq.downloader.util.RBCWrapper;
 
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -32,43 +39,12 @@ public class DownloaderServiceImpl implements DownloaderService {
 
 	@Autowired
 	private ProgressCallBackService progressCallBackService;
-//    private MyStompSessionHandler myStompSessionHandler;
-//	@Setter
-//	private DownloadRequest downloadRequest;
 
-//    public DownloaderServiceImpl() {
-//        myStompSessionHandler= createMyStompSessionHandler();
-//    }
+	/* Creamos una referencia hacia el repositorio de datos */
+	@Autowired
+	private DownloadFileRepository downloadFileRepository;
 
-	@Override
-	public void downLoadFile(Path path, URLConnection urlConnection, long localFileSize,DownloadRequest downloadRequest) {
-
-		log.info("Download initialize, {}", path.getFileName());
-		MyStompSessionHandler myStompSessionHandler = createMyStompSessionHandler(downloadRequest);
-		try (ReadableByteChannel rbc = new RBCWrapper(Channels.newChannel(urlConnection.getInputStream()),
-				localFileSize, (urlConnection.getContentLength() + localFileSize), this, myStompSessionHandler, downloadRequest);
-				FileOutputStream fos = new FileOutputStream(path.toString(), true);
-				FileChannel fileChannel = fos.getChannel()) {
-			fileChannel.transferFrom(rbc, 0, Long.MAX_VALUE);
-
-		} catch (IOException e) {
-			log.error("Uh oh: " + e);
-		}
-	}
-
-	@Override
-	public void notifyDownloadProgres(long sizeRead, double progress, MyStompSessionHandler mysSessionHandler,DownloadRequest downloadRequest) {
-		/* Este muestra el progreso de descarga en este hilo */
-		this.progressCallBackService.rbcProgressCallback(sizeRead, progress);
-		/*
-		 * Envía un mensaje al servidor socket para notificar al cliente del progreso de
-		 * descarga
-		 */
-		mysSessionHandler.sendMessage(
-				new FileStatus(downloadRequest.getFileName(), downloadRequest.getClient(), sizeRead, progress));
-
-	}
-
+	/* metodo para crear clientes stomp, para cada descarga */
 	private MyStompSessionHandler createMyStompSessionHandler(DownloadRequest downloadRequest) {
 
 		WebSocketClient client = new StandardWebSocketClient();
@@ -82,6 +58,48 @@ public class DownloaderServiceImpl implements DownloaderService {
 		StompSessionHandler sessionHandler = myStompSessionHandler;
 		stompClient.connectAsync(url, sessionHandler);
 		return myStompSessionHandler;
+
+	}
+
+	@Override
+	public DownloadContructorResponse downloadContructor(DownloadContructorRequest downloadContructorRequest) {
+
+		Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "dfName");
+		List<DownloadFile> downloadFile = (List<DownloadFile>) this.downloadFileRepository.findAll(pageable).getContent();
+
+		return new DownloadContructorResponse();
+
+	}
+
+	@Override
+	public void downLoadFile(Path path, URLConnection urlConnection, long localFileSize,
+			DownloadRequest downloadRequest) {
+
+		log.info("Download initialize, {}", path.getFileName());
+		MyStompSessionHandler myStompSessionHandler = createMyStompSessionHandler(downloadRequest);
+		try (ReadableByteChannel rbc = new RBCWrapper(Channels.newChannel(urlConnection.getInputStream()),
+				localFileSize, (urlConnection.getContentLength() + localFileSize), this, myStompSessionHandler,
+				downloadRequest);
+				FileOutputStream fos = new FileOutputStream(path.toString(), true);
+				FileChannel fileChannel = fos.getChannel()) {
+			fileChannel.transferFrom(rbc, 0, Long.MAX_VALUE);
+
+		} catch (IOException e) {
+			log.error("Uh oh: " + e);
+		}
+	}
+
+	@Override
+	public void notifyDownloadProgres(long sizeRead, double progress, MyStompSessionHandler mysSessionHandler,
+			DownloadRequest downloadRequest) {
+		/* Este muestra el progreso de descarga en este hilo */
+		this.progressCallBackService.rbcProgressCallback(sizeRead, progress);
+		/*
+		 * Envía un mensaje al servidor socket para notificar al cliente del progreso de
+		 * descarga
+		 */
+		mysSessionHandler.sendMessage(
+				new DownloadResponse(downloadRequest.getFileName(), downloadRequest.getClient(), sizeRead, progress));
 
 	}
 

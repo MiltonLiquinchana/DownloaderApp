@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 
+import com.mflq.downloader.dto.DownloadRequest;
 import com.mflq.downloader.handler.MyStompSessionHandler;
-import com.mflq.downloader.model.DownloadRequest;
 import com.mflq.downloader.service.DownloaderService;
 
 import lombok.extern.log4j.Log4j2;

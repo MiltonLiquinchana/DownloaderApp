@@ -7,7 +7,7 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
-import com.mflq.downloader.model.FileStatus;
+import com.mflq.downloader.dto.DownloadResponse;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -39,17 +39,17 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 	@Override
 	public Type getPayloadType(StompHeaders headers) {
 		/* Por el momento el mensaje es de tipo string */
-		return FileStatus.class;
+		return DownloadResponse.class;
 	}
 
 	/* Este metodo maneja los mensajes recividos */
 	@Override
 	public void handleFrame(StompHeaders headers, Object payload) {
-		FileStatus msg = (FileStatus) payload;
+		DownloadResponse msg = (DownloadResponse) payload;
 		log.info("Mensaje recivido: ***{}", msg);
 	}
 
-	public void sendMessage(FileStatus fileStatus) {
-		this.session.send("/app/message", fileStatus);
+	public void sendMessage(DownloadResponse downloadResponse) {
+		this.session.send("/app/message", downloadResponse);
 	}
 }

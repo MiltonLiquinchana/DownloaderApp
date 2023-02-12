@@ -11,7 +11,7 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AsyncConfiguration {
     @Bean(name = "asyncExecutor")
-    public Executor asyncExecutor() {
+    Executor asyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
         /*Minimo de hilos que se va a utilizar en la app*/
