@@ -9,10 +9,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
+@ToString
 public class FileType {
 
 	@Id
@@ -23,5 +25,6 @@ public class FileType {
 	private String ftType;
 
 	@OneToMany(mappedBy = "fileType", cascade = CascadeType.REFRESH)
+	@ToString.Exclude
 	private List<DownloadFile> downloadFiles;
 }

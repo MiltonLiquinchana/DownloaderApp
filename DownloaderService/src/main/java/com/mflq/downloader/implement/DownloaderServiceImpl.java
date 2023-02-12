@@ -26,6 +26,7 @@ import com.mflq.downloader.dto.DownloadRequest;
 import com.mflq.downloader.dto.DownloadResponse;
 import com.mflq.downloader.handler.MyStompSessionHandler;
 import com.mflq.downloader.model.DownloadFile;
+import com.mflq.downloader.projection.DownloadFileProjection;
 import com.mflq.downloader.repository.DownloadFileRepository;
 import com.mflq.downloader.service.DownloaderService;
 import com.mflq.downloader.service.ProgressCallBackService;
@@ -64,8 +65,11 @@ public class DownloaderServiceImpl implements DownloaderService {
 	@Override
 	public DownloadContructorResponse downloadContructor(DownloadContructorRequest downloadContructorRequest) {
 
-		Pageable pageable = PageRequest.of(0, 10, Sort.Direction.ASC, "dfName");
-		List<DownloadFile> downloadFile = (List<DownloadFile>) this.downloadFileRepository.findAll(pageable).getContent();
+//		List<DownloadFile> downloadFile =  this.downloadFileRepository.findAll();
+//		
+//		List<DownloadFileProjection> downList=this.downloadFileRepository.findByDfStatus(true);
+////		log.info(downloadFile);
+//		log.info(downList);
 
 		return new DownloadContructorResponse();
 
