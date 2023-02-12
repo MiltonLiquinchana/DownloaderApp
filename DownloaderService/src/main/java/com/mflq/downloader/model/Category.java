@@ -9,10 +9,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Setter
+@ToString
 public class Category {
 
 	@Id
@@ -26,5 +28,6 @@ public class Category {
 	private String cFileOutputPath;
 
 	@OneToMany(mappedBy = "category", cascade = CascadeType.REFRESH)
+	@ToString.Exclude
 	private List<DownloadFile> downloadFiles;
 }
