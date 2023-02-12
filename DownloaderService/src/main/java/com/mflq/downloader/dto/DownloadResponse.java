@@ -1,4 +1,4 @@
-package com.mflq.downloader.model;
+package com.mflq.downloader.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileStatus {
+public class DownloadResponse {
+    private String from;
+    private String to;
     private long sizeRead;
     private double progress;
 

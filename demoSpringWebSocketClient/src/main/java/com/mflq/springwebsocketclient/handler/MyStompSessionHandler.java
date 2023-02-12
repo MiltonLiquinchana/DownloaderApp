@@ -1,6 +1,7 @@
 package com.mflq.springwebsocketclient.handler;
 
 import com.mflq.springwebsocketclient.model.FileStatus;
+import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -10,11 +11,14 @@ import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import java.lang.reflect.Type;
 
 @Log4j2
+@AllArgsConstructor
 public class MyStompSessionHandler extends StompSessionHandlerAdapter {
+    private String userSubscribeName;
+
 
     @Override
     public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
-        session.subscribe("/user/springClient/queue/notification", this);
+        session.subscribe("/user/" + userSubscribeName + "/queue/notification", this);
     }
 
     @Override

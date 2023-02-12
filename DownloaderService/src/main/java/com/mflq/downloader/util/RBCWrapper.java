@@ -1,11 +1,14 @@
 package com.mflq.downloader.util;
 
-import com.mflq.downloader.service.DownloaderService;
-import lombok.extern.log4j.Log4j2;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
+
+import com.mflq.downloader.dto.DownloadRequest;
+import com.mflq.downloader.handler.MyStompSessionHandler;
+import com.mflq.downloader.service.DownloaderService;
+
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class RBCWrapper implements ReadableByteChannel {
@@ -13,13 +16,16 @@ public class RBCWrapper implements ReadableByteChannel {
     private final long sizeFileOnline;
     private final ReadableByteChannel readableByteChannel;
     private long sizeRead;
+    private MyStompSessionHandler mysSessionHandler;
+    private DownloadRequest downloadRequest;
 
-
-    public RBCWrapper(ReadableByteChannel readableByteChannel, long sizeFileLocal, long sizeFileOnline, DownloaderService delegate) {
+    public RBCWrapper(ReadableByteChannel readableByteChannel, long sizeFileLocal, long sizeFileOnline, DownloaderService delegate,MyStompSessionHandler mysSessionHandler,DownloadRequest downloadRequest ) {
         this.readableByteChannel = readableByteChannel;
         this.sizeRead = sizeFileLocal;
         this.sizeFileOnline = sizeFileOnline;
         this.delegate = delegate;
+        this.mysSessionHandler=mysSessionHandler;
+        this.downloadRequest=downloadRequest;
     }
 
     @Override
@@ -42,7 +48,7 @@ public class RBCWrapper implements ReadableByteChannel {
 
             double progress = this.sizeFileOnline > 0 ? (((double) this.sizeRead / (double) this.sizeFileOnline) * 100.0) : -1.0;
 
-            this.delegate.notifyDownloadProgres(this.sizeRead, progress);
+            this.delegate.notifyDownloadProgres(this.sizeRead, progress,this.mysSessionHandler,downloadRequest	);
 
         }
         return n;

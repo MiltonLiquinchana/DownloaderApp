@@ -1,0 +1,20 @@
+.container {
+    border: 2px black solid;
+}
+.downloader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .progress {
+        margin: 10px 0px;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        .progress-bar {
+            width: 10%;
+        }
+    }
+    .btn{
+        width: 50%;
+    }
+}

@@ -1,4 +1,4 @@
-package com.mflq.downloader.configuration;
+package com.mflq.springwebsocketclient.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import java.util.concurrent.Executor;
 @EnableAsync
 public class AsyncConfiguration {
     @Bean(name = "asyncExecutor")
-    Executor asyncExecutor() {
+    public Executor asyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
 
         /*Minimo de hilos que se va a utilizar en la app*/
