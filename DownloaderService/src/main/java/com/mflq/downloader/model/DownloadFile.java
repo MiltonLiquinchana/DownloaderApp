@@ -2,12 +2,13 @@ package com.mflq.downloader.model;
 
 import java.math.BigDecimal;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,6 +20,8 @@ import lombok.ToString;
 public class DownloadFile {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+	@GenericGenerator(name = "native", strategy = "native")
 	@Column(name = "PK_DOWNLOADFILE", nullable = false, updatable = false)
 	private Integer pkDownloadfile;
 
@@ -36,12 +39,18 @@ public class DownloadFile {
 
 	@Column(name = "DF_Status", nullable = false)
 	private Boolean dfStatus;
+	
+	@Column(name = "FK_FILETYPE")
+	private Integer fkFileType;
+	
+	@Column(name = "FK_CATEGORY")
+	private Integer fkCategory;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "FK_FILETYPE", nullable = false)
-	private FileType fileType;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "FK_FILETYPE")
+//	private FileType fileType;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "FK_CATEGORY", nullable = false)
-	private Category category;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "FK_CATEGORY")
+//	private Category category;
 }

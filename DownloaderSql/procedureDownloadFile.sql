@@ -1,0 +1,9 @@
+DELIMITER $$
+DROP PROCEDURE IF EXISTS getById;
+CREATE PROCEDURE getById(
+IN id int DEFAULT 1
+)
+BEGIN
+	select * from DownloadFile as df where df.PK_DOWNLOADFILE=id
+END $$
+DELIMITER ;

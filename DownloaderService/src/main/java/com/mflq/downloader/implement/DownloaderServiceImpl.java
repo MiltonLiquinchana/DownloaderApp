@@ -2,17 +2,14 @@ package com.mflq.downloader.implement;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URLConnection;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Path;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompSessionHandler;
 import org.springframework.stereotype.Service;
@@ -25,8 +22,9 @@ import com.mflq.downloader.dto.DownloadContructorResponse;
 import com.mflq.downloader.dto.DownloadRequest;
 import com.mflq.downloader.dto.DownloadResponse;
 import com.mflq.downloader.handler.MyStompSessionHandler;
+import com.mflq.downloader.model.Category;
 import com.mflq.downloader.model.DownloadFile;
-import com.mflq.downloader.projection.DownloadFileProjection;
+import com.mflq.downloader.model.FileType;
 import com.mflq.downloader.repository.DownloadFileRepository;
 import com.mflq.downloader.service.DownloaderService;
 import com.mflq.downloader.service.ProgressCallBackService;
@@ -64,7 +62,7 @@ public class DownloaderServiceImpl implements DownloaderService {
 
 	@Override
 	public DownloadContructorResponse downloadContructor(DownloadContructorRequest downloadContructorRequest) {
-
+		
 //		List<DownloadFile> downloadFile =  this.downloadFileRepository.findAll();
 //		
 //		List<DownloadFileProjection> downList=this.downloadFileRepository.findByDfStatus(true);
