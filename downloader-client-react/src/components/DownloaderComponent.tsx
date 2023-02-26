@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import "../css/Downloader.css";
 import StompClientServiceImpl from "../implement/StompClientServiceImpl";
 import StompClientService from "../service/StompClientService";
-interface props{
-  clientName:string;
+interface Props {
+  clientName: string;
 }
 
-export default function DownloaderComponent({clientName}:props) {
+export default function DownloaderComponent({ clientName }: Props) {
   let stompClient: StompClientService;
   /**Creamos una referencia hacia el progres */
-  const [downloadState, setDownloadState] = useState<string | number>('0%');
+  const [downloadState, setDownloadState] = useState<string | number>("0%");
 
   /**Con useEffect vacio solo creamos una vez la instancia del cliente */
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function DownloaderComponent({clientName}:props) {
           role="progressbar"
           aria-label="Animated striped example"
           style={styles}
-          aria-valuenow={Number(downloadState.toString().replace('%',''))}
+          aria-valuenow={Number(downloadState.toString().replace("%", ""))}
           aria-valuemin={0}
           aria-valuemax={100}
         >

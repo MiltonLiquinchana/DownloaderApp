@@ -60,7 +60,7 @@ public class DownloaderController {
 			@RequestBody DownloadContructorRequest downloadContructorRequest) {
 		
 		
-		return new ResponseEntity<DownloadContructorResponse>(downloaderService.downloadContructor(downloadContructorRequest), HttpStatus.OK);
+		return new ResponseEntity<>(downloaderService.downloadContructor(downloadContructorRequest), HttpStatus.OK);
 	}
 
 }

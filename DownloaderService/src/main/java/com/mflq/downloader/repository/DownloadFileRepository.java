@@ -12,7 +12,11 @@ import com.mflq.downloader.model.DownloadFileProjection;
 @RepositoryRestResource(path = "downloadfile", collectionResourceRel = "downloadfiles", exported = true)
 public interface DownloadFileRepository
 		extends PagingAndSortingRepository<DownloadFile, Integer>, CrudRepository<DownloadFile, Integer> {
-	@Query(value = "CALL getById(:id)", nativeQuery = true)
+	/*
+	 * Es rocomendable usar una proyeccion con un procedure que hace un join, cuando
+	 * el resultado a devolver es solo un objeto, caso contrario si es una lista de
+	 * objetos dara error
+	 */
+	@Query(value = "CALL SEARCHID(:id)", nativeQuery = true)
 	DownloadFileProjection getDownloadFileById(@Param("id") Integer id);
-
 }
