@@ -13,6 +13,9 @@ interface FetchState {
 	error: Error | null;
 }
 
+/** En teoría este custom hook solo se devenía ejecutar una vez, solo se ejecuta cuando el
+ * cuando la url, u opciones cambian
+ */
 export default function useFetch({ url, options }: Props): FetchState {
 
 	/** En este estado vamos a guardar la data que recibamos al hacer la petición */
@@ -31,8 +34,6 @@ export default function useFetch({ url, options }: Props): FetchState {
 	useEffect(() => {
 
 		const getData = async () => {
-
-			console.log('ejecutando');
 
 			try {
 

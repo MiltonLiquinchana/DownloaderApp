@@ -1,89 +1,63 @@
-import { useEffect, useRef, useState } from 'react';
+import { forwardRef, RefObject, useEffect, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
 import Category from '../../model/Category';
 
-export default function CategorySelect() {
+interface Props {
+	changeCategoryPath: Function;
+}
 
-  const { data, isPending } = useFetch({
+const CategorySelect = forwardRef<HTMLSelectElement, Props>((props, ref) => {
+
+	const { data, isPending } = useFetch({
 		url: 'http://localhost:8082/downloaderservice/api/category',
 	});
 
-  const [categorys, setCategorys] = useState<Array<Category>>();
+	/** Estado que cambia cuando se obtiene los datos */
+	const [categorys, setCategorys] = useState<Array<Category>>([]);
 
-	const selectRef = useRef<HTMLSelectElement>(null);
-
-	// let categorys: Array<Category> | null = null;
-
-  /** Creamos una función que  retorna un arreglo de options */
-	const createOption = () => {
-
-    console.log("categorias: "+categorys);
-    
-    if (!categorys) {
-
-			return;
-
-		}
-
-		categorys.forEach((category: Category) => {
-
-			if (!selectRef.current) {
-
-				return;
-
-			}
-
-			const option: HTMLOptionElement = document.createElement('option');
-      
-			option.text = category.categoryName;
-
-			option.value = `${category.id}`;
-
-			if (category.id === 1) {
-
-				option.selected = true;
-
-			}
-
-			selectRef.current.add(option);
-
-		});
-
-	};
-
+	/** este useEffect se ejecuta cuando el valor de isPending, data cambia */
 	useEffect(() => {
 
 		if (isPending) {
 
 			return;
-		
-    }
 
-    console.log(isPending);
+		}
 
-    // eslint-disable-next-line no-underscore-dangle
-    console.log(data._embedded.categorys);
+		// eslint-disable-next-line no-underscore-dangle
+		setCategorys(data._embedded.categorys);
 
-    // eslint-disable-next-line no-underscore-dangle
-    setCategorys(data._embedded.categorys as Array<Category>);
-
-		createOption();
-    
-    console.log("jajja");
-	
-// eslint-disable-next-line padded-blocks
-// eslint-disable-next-line react-hooks/exhaustive-deps
-}, [data]);
+	}, [data, isPending]);
 
 	return (
-
 		<select
-			ref={selectRef}
 			className="form-select"
 			aria-label=".form-select-lg example"
 			id="category"
-		/>
-    
+			ref={ref}
+			onChange={() => {
+
+				const reference= ref as RefObject<HTMLSelectElement>;
+
+				if(!reference.current){
+
+					return;
+
+				}
+
+				console.log(categorys[Number(reference.current.value)-1]);
+
+				props.changeCategoryPath(categorys[Number(reference.current.value)-1].categoryFileOutputPath);
+
+			}}>
+			{categorys.map(({ id, categoryName }: Category) => (
+				<option value={id} key={id}>
+					{categoryName}
+				</option>
+			))}
+		</select>
 	);
 
-}
+});
+
+export default CategorySelect;

@@ -6,9 +6,17 @@ import SearchSelect from './views/SearchSelect';
 export default function DownloaderFileInfoComponent() {
 
 	const refer = useRef<HTMLDivElement>(null);
+	const categorySelectRef = useRef<HTMLSelectElement>(null);
+
 	const clicleable = () => {
 
 		console.log(refer.current);
+
+	};
+
+	const categoryFunction = (path:String) => {
+
+		console.log(path);
 
 	};
 
@@ -19,8 +27,7 @@ export default function DownloaderFileInfoComponent() {
 				type="button"
 				className="btn btn-primary"
 				data-bs-toggle="modal"
-				data-bs-target="#staticBackdrop"
-			>
+				data-bs-target="#staticBackdrop">
 				Launch static backdrop modal
 			</button>
 
@@ -32,8 +39,7 @@ export default function DownloaderFileInfoComponent() {
 				data-bs-keyboard="false"
 				tabIndex={-1}
 				aria-labelledby="staticBackdropLabel"
-				aria-hidden="true"
-			>
+				aria-hidden="true">
 				<div className="modal-dialog modal-dialog-centered modal-lg">
 					<div className="modal-content">
 						<div className="modal-header">
@@ -59,19 +65,18 @@ export default function DownloaderFileInfoComponent() {
 								</div>
 
 								<div className="mb-4 row">
-									<label
-										htmlFor="category"
-										className="col-sm-2 col-form-label"
-									>
+									<label htmlFor="category" className="col-sm-2 col-form-label">
 										Category
 									</label>
 									<div className="col-auto">
 										<div className="row g-2">
 											<div className="col-auto">
-												<CategorySelect />
+												<CategorySelect changeCategoryPath={categoryFunction} ref={categorySelectRef} />
 											</div>
 											<div className="col-auto">
-												<button type="button" className="btn btn-outline-info">
+												<button
+													type="button"
+													className="btn btn-outline-info">
 													+
 												</button>
 											</div>
@@ -82,8 +87,7 @@ export default function DownloaderFileInfoComponent() {
 								<div className="mb-4 row">
 									<label
 										htmlFor="inputPassword"
-										className="col-sm-2 col-form-label"
-									>
+										className="col-sm-2 col-form-label">
 										Save As
 									</label>
 									<div className="col-sm-10">
@@ -102,8 +106,7 @@ export default function DownloaderFileInfoComponent() {
 															/>
 															<label
 																className="form-check-label"
-																htmlFor="flexCheckDefault"
-															>
+																htmlFor="flexCheckDefault">
 																Remember this path for General category
 															</label>
 														</div>
@@ -129,8 +132,7 @@ export default function DownloaderFileInfoComponent() {
 
 														clicleable();
 
-													}}
-												>
+													}}>
 													...
 												</button>
 											</div>
@@ -140,8 +142,7 @@ export default function DownloaderFileInfoComponent() {
 								<div className="mb-4 row">
 									<label
 										htmlFor="inputPassword"
-										className="col-sm-2 col-form-label"
-									>
+										className="col-sm-2 col-form-label">
 										Description
 									</label>
 									<div className="col-sm-10">
@@ -158,13 +159,11 @@ export default function DownloaderFileInfoComponent() {
 							<div
 								className="btn-group"
 								role="group"
-								aria-label="Basic mixed styles example"
-							>
+								aria-label="Basic mixed styles example">
 								<button
 									type="button"
 									className="btn btn-danger"
-									data-bs-dismiss="modal"
-								>
+									data-bs-dismiss="modal">
 									Download Later
 								</button>
 								<button type="button" className="btn btn-warning">
