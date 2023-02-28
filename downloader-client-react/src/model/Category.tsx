@@ -1,5 +1,9 @@
-export default interface Category {
-  id: number;
-  categoryName: string;
-  categoryFileOutputPath: string;
+export default class Category {
+
+	public id!: number;
+
+	public categoryName!: string;
+
+	public categoryFileOutputPath!: string;
+
 }

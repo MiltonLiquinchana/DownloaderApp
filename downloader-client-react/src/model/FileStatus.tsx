@@ -1,4 +1,7 @@
-export default interface FileStatus {
-     sizeRead:number;
-     progress:number;
+export default class FileStatus {
+
+	public sizeRead!: number;
+
+	public progress!: number;
+
 }

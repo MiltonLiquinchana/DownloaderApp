@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import '../css/DownloaderFileInfo.css';
 import CategorySelect from './views/CategorySelect';
 import SearchSelect from './views/SearchSelect';
@@ -7,6 +7,7 @@ export default function DownloaderFileInfoComponent() {
 
 	const refer = useRef<HTMLDivElement>(null);
 	const categorySelectRef = useRef<HTMLSelectElement>(null);
+	const inputCategoryPath = useRef<HTMLInputElement>(null);
 
 	const clicleable = () => {
 
@@ -14,9 +15,55 @@ export default function DownloaderFileInfoComponent() {
 
 	};
 
-	const categoryFunction = (path:String) => {
+	const categoryFunction = (path: string) => {
 
-		console.log(path);
+		if (!inputCategoryPath.current) {
+
+			return;
+
+		}
+
+		inputCategoryPath.current.value = path;
+
+	};
+
+	const validateURL = (e: ChangeEvent<HTMLInputElement>) => {
+
+		let isUrl: boolean = true;
+
+		try {
+
+			const url = new URL(e.target.value);
+
+			console.log(url);
+
+		} catch (error) {
+
+			isUrl = false;
+
+		}
+
+		if (!e.target.value) {
+
+			e.target.classList.remove('is-invalid', 'is-valid');
+
+			return;
+
+		}
+
+		if (!isUrl) {
+
+			e.target.classList.add('is-invalid');
+
+			e.target.classList.remove('is-valid');
+
+			return;
+
+		}
+
+		e.target.classList.add('is-valid');
+
+		e.target.classList.remove('is-invalid');
 
 	};
 
@@ -60,7 +107,16 @@ export default function DownloaderFileInfoComponent() {
 										URL
 									</label>
 									<div className="col-sm-10">
-										<input type="text" className="form-control" id="url" />
+										<input
+											type="text"
+											className="form-control"
+											id="url"
+											onChange={e => {
+
+												validateURL(e);
+
+											}}
+										/>
 									</div>
 								</div>
 
@@ -71,12 +127,13 @@ export default function DownloaderFileInfoComponent() {
 									<div className="col-auto">
 										<div className="row g-2">
 											<div className="col-auto">
-												<CategorySelect changeCategoryPath={categoryFunction} ref={categorySelectRef} />
+												<CategorySelect
+													changeCategoryPath={categoryFunction}
+													ref={categorySelectRef}
+												/>
 											</div>
 											<div className="col-auto">
-												<button
-													type="button"
-													className="btn btn-outline-info">
+												<button type="button" className="btn btn-outline-info">
 													+
 												</button>
 											</div>
@@ -114,6 +171,7 @@ export default function DownloaderFileInfoComponent() {
 
 													<div className="col-sm-12">
 														<input
+															ref={inputCategoryPath}
 															type="text"
 															className="form-control "
 															id="inputPassword"
