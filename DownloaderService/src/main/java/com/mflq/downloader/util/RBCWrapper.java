@@ -12,47 +12,50 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class RBCWrapper implements ReadableByteChannel {
-    DownloaderService delegate;
-    private final long sizeFileOnline;
-    private final ReadableByteChannel readableByteChannel;
-    private long sizeRead;
-    private MyStompSessionHandler mysSessionHandler;
-    private DownloadRequest downloadRequest;
+	DownloaderService delegate;
+	private final long sizeFileOnline;
+	private final ReadableByteChannel readableByteChannel;
+	private long sizeRead;
+	private MyStompSessionHandler mysSessionHandler;
+	private DownloadRequest downloadRequest;
 
-    public RBCWrapper(ReadableByteChannel readableByteChannel, long sizeFileLocal, long sizeFileOnline, DownloaderService delegate,MyStompSessionHandler mysSessionHandler,DownloadRequest downloadRequest ) {
-        this.readableByteChannel = readableByteChannel;
-        this.sizeRead = sizeFileLocal;
-        this.sizeFileOnline = sizeFileOnline;
-        this.delegate = delegate;
-        this.mysSessionHandler=mysSessionHandler;
-        this.downloadRequest=downloadRequest;
-    }
+	public RBCWrapper(ReadableByteChannel readableByteChannel, long sizeFileLocal, long sizeFileOnline,
+			DownloaderService delegate, MyStompSessionHandler mysSessionHandler, DownloadRequest downloadRequest) {
+		this.readableByteChannel = readableByteChannel;
+		this.sizeRead = sizeFileLocal;
+		this.sizeFileOnline = sizeFileOnline;
+		this.delegate = delegate;
+		this.mysSessionHandler = mysSessionHandler;
+		this.downloadRequest = downloadRequest;
+	}
 
-    @Override
-    public void close() throws IOException {
-        this.readableByteChannel.close();
-    }
+	@Override
+	public void close() throws IOException {
+		this.readableByteChannel.close();
+	}
 
+	@Override
+	public boolean isOpen() {
+		return this.readableByteChannel.isOpen();
+	}
 
-    @Override
-    public boolean isOpen() {
-        return this.readableByteChannel.isOpen();
-    }
+	@Override
+	public int read(ByteBuffer bb) throws IOException {
+		log.debug("Descargando bytes", "read");
 
-    @Override
-    public int read(ByteBuffer bb) throws IOException {
-        int n;
-        if ((n = this.readableByteChannel.read(bb)) > 0) {
+		int n;
+		if ((n = this.readableByteChannel.read(bb)) > 0) {
 
-            this.sizeRead += n;
+			this.sizeRead += n;
 
-            double progress = this.sizeFileOnline > 0 ? (((double) this.sizeRead / (double) this.sizeFileOnline) * 100.0) : -1.0;
+			double progress = this.sizeFileOnline > 0
+					? (((double) this.sizeRead / (double) this.sizeFileOnline) * 100.0)
+					: -1.0;
 
-            this.delegate.notifyDownloadProgres(this.sizeRead, progress,this.mysSessionHandler,downloadRequest	);
+			this.delegate.notifyDownloadProgres(this.sizeRead, progress, this.mysSessionHandler, downloadRequest);
 
-        }
-        return n;
-    }
-
+		}
+		return n;
+	}
 
 }

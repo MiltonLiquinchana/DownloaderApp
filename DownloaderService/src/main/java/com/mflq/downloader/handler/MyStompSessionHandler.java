@@ -23,6 +23,7 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 	/* Después de conectar */
 	@Override
 	public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
+		log.debug("Subscribiendo con el usuario {} afterConnected", this.downloadClientName);
 		// Nos subscribimos a un endpoint para escuchar los mensajes
 		session.subscribe("/user/" + this.downloadClientName + "/queue/notification", this);
 		this.session = session;
@@ -36,9 +37,12 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 		log.error("Got an exception", exception);
 	}
 
+	/* Este metodo establece el tipo de mensaje saliente */
 	@Override
 	public Type getPayloadType(StompHeaders headers) {
-		/* Por el momento el mensaje es de tipo string */
+		log.debug("Estableciendo typos de mensajes salientes getPayloadType");
+
+		/* Por el momento el mensaje es de tipo DownloadResponse.class */
 		return DownloadResponse.class;
 	}
 
@@ -46,10 +50,11 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 	@Override
 	public void handleFrame(StompHeaders headers, Object payload) {
 		DownloadResponse msg = (DownloadResponse) payload;
-		log.info("Mensaje recivido: ***{}", msg);
+		log.debug("Mensaje recivido: {}", msg);
 	}
 
 	public void sendMessage(DownloadResponse downloadResponse) {
+		log.debug("Notificando al cliente");
 		this.session.send("/app/message", downloadResponse);
 	}
 }
