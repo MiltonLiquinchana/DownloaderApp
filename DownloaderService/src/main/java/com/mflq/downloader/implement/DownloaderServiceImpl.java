@@ -34,6 +34,7 @@ import lombok.extern.log4j.Log4j2;
 @Service
 public class DownloaderServiceImpl implements DownloaderService {
 
+	/* Creamos una referencia al servicio de notificacion de progreso de descarga */
 	@Autowired
 	private ProgressCallBackService progressCallBackService;
 
@@ -43,17 +44,35 @@ public class DownloaderServiceImpl implements DownloaderService {
 
 	/* metodo para crear clientes stomp, para cada descarga */
 	private MyStompSessionHandler createMyStompSessionHandler(DownloadRequest downloadRequest) {
+		log.debug("Creando cliente Stomp createMyStompSessionHandler");
 
+		/* Creamos un nuevo cliente WebSocketClient */
 		WebSocketClient client = new StandardWebSocketClient();
 
+		/* Crea un nuevo cliente stomp con el cliente WebSocket */
 		WebSocketStompClient stompClient = new WebSocketStompClient(client);
+
+		/*
+		 * Agregamos un conversor de mensajes en este caso para manejar mensajes en
+		 * formato json
+		 */
 		stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
+		/* URL del servidor websocket */
 		String url = "ws://localhost:8080/ws";
 
+		/* Creamos un nuevo manejador de sesiones con el nombre del archivo */
 		MyStompSessionHandler myStompSessionHandler = new MyStompSessionHandler(downloadRequest.getFileName());
+
+		/* Creamos un nuevo manejador de sessiones stomp con el handler anterior */
 		StompSessionHandler sessionHandler = myStompSessionHandler;
+
+		/*
+		 * Conectamos al servidor, pasamos la url y controlardor de la session(Este es
+		 * el que controla la manera de como manipular los mensajes que entran y salen)
+		 */
 		stompClient.connectAsync(url, sessionHandler);
+		/* Retornamos la intancia del cliente stomp */
 		return myStompSessionHandler;
 
 	}
@@ -73,8 +92,8 @@ public class DownloaderServiceImpl implements DownloaderService {
 	@Override
 	public void downLoadFile(Path path, URLConnection urlConnection, long localFileSize,
 			DownloadRequest downloadRequest) {
-
-		log.info("Download initialize, {}", path.getFileName());
+		log.debug("Download initialize, {}", path.getFileName());
+		
 		MyStompSessionHandler myStompSessionHandler = createMyStompSessionHandler(downloadRequest);
 		try (ReadableByteChannel rbc = new RBCWrapper(Channels.newChannel(urlConnection.getInputStream()),
 				localFileSize, (urlConnection.getContentLength() + localFileSize), this, myStompSessionHandler,
