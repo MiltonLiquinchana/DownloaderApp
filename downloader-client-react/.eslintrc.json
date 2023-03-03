@@ -1,0 +1,134 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        }
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+        "plugin:react-hooks/recommended",
+        "plugin:react/jsx-runtime", //esto es para que no sea necesario importar react en cada archivo
+        "plugin:react/jsx-runtime",
+        "eslint-config-prettier"
+    ],
+    "overrides": [],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint",
+        "react-hooks"
+    ],
+    "rules": {
+        "indent": [
+            "warn",
+            "tab"
+        ],
+        "quotes": "warn",
+        "semi": "error",
+        "jsx-a11y/label-has-associated-control": [
+            2,
+            {
+                "assert": "htmlFor",
+                "depth": 3
+            }
+        ],
+        "react/jsx-filename-extension": [
+            1,
+            {
+                "extensions": [
+                    ".js",
+                    ".jsx",
+                    ".ts",
+                    ".tsx"
+                ]
+            }
+        ],
+        "react/prefer-stateless-function": "off",
+        "import/extensions": "off",
+        "import/no-unresolved": "error",
+        "import/newline-after-import": [
+            "warn",
+            {
+                "count": 1
+            }
+        ],
+        "react/state-in-constructor": [
+            "warn",
+            "always"
+        ],
+        "comma-spacing": "warn",
+        "padded-blocks": [
+            "warn",
+            "always"
+        ],
+        "no-console": [
+            "warn",
+            {
+                "allow": [
+                    "warn",
+                    "error"
+                ]
+            }
+        ],
+        "react/jsx-one-expression-per-line": "off",
+        "no-trailing-spaces": "warn",
+        "no-multiple-empty-lines": [
+            "warn",
+            {
+                "max": 1,
+                "maxEOF": 1
+            }
+        ],
+        "padding-line-between-statements": [
+            "warn",
+            {
+                "blankLine": "always",
+                "prev": [
+                    "const",
+                    "let",
+                    "var",
+                    "*"
+                ],
+                "next": "*"
+            },
+            {
+                "blankLine": "any",
+                "prev": [
+                    "const",
+                    "let",
+                    "var",
+                    "import"
+                ],
+                "next": [
+                    "const",
+                    "let",
+                    "var",
+                    "import"
+                ]
+            }
+        ],
+        "spaced-comment": "warn",
+        "react/no-unused-state": "warn",
+        "no-unused-vars": "warn",
+        "react/self-closing-comp": "warn"
+    }
+}

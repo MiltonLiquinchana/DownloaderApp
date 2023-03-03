@@ -29,8 +29,4 @@ false,
 
 -- selected DownloadFile scripts
 SELECT * FROM DownloadFile;
-SELECT d.*,c.C_NAME FROM DownloadFile as d
-JOIN Category as c
-ON c.PK_CATEGORY = d.FK_CATEGORY
-
 -- updated DownloadFile scrips
