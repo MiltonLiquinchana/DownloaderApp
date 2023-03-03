@@ -11,7 +11,7 @@ export default function DownloaderFileInfoComponent() {
 
 	const clicleable = () => {
 
-		console.log(refer.current);
+		console.log(refer.current?.getAttribute('data-value'));
 
 	};
 
@@ -24,46 +24,6 @@ export default function DownloaderFileInfoComponent() {
 		}
 
 		inputCategoryPath.current.value = path;
-
-	};
-
-	const validateURL = (e: ChangeEvent<HTMLInputElement>) => {
-
-		let isUrl: boolean = true;
-
-		try {
-
-			const url = new URL(e.target.value);
-
-			console.log(url);
-
-		} catch (error) {
-
-			isUrl = false;
-
-		}
-
-		if (!e.target.value) {
-
-			e.target.classList.remove('is-invalid', 'is-valid');
-
-			return;
-
-		}
-
-		if (!isUrl) {
-
-			e.target.classList.add('is-invalid');
-
-			e.target.classList.remove('is-valid');
-
-			return;
-
-		}
-
-		e.target.classList.add('is-valid');
-
-		e.target.classList.remove('is-invalid');
 
 	};
 
@@ -111,11 +71,6 @@ export default function DownloaderFileInfoComponent() {
 											type="text"
 											className="form-control"
 											id="url"
-											onChange={e => {
-
-												validateURL(e);
-
-											}}
 										/>
 									</div>
 								</div>

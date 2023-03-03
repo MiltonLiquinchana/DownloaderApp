@@ -38,7 +38,7 @@ export default class StompClientServiceImpl implements StompClientService {
 			// Esta función se ejecuta en caso de un error
 			(error) => {
 
-				console.log('Ocurrio un problema, conectando en 10 segundos');
+				console.log('Ocurrió un problema, conectando en 10 segundos');
 
 				console.log(error);
 
