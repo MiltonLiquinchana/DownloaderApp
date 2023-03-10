@@ -1,4 +1,4 @@
-package com.mflq.downloader.model;
+package com.mflq.downloader.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -31,6 +31,7 @@ public class Category {
 //	@OneToMany(mappedBy = "category", cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
 //	@ToString.Exclude
 //	private List<DownloadFile> downloadFiles;
+
 	public Integer getId() {
 		return pkCategory;
 	}

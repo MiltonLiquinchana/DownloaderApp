@@ -5,16 +5,18 @@ DF_URL,
 DF_NAME,
 DF_FileLength,
 DF_Description,
-DF_STATUS,
+FK_CATEGORY,
 FK_FILETYPE,
-FK_CATEGORY
+FK_DOWNLOADSTATUS,
+FK_DOWNLOADQUEUE
 ) VALUES(
 "https://speed.hetzner.de/100MB.bin",
 "100MB.bin",
 104857600,
 "description de archivo",
-true,
-4,
+1,
+2,
+1,
 1
 ),
 (
@@ -22,9 +24,10 @@ true,
 "Super Dragon Ball Heroes Universal Conflict Arc (All Season 2 Anime Episodes).mp4",
 521134832,
 "description de video",
-false,
 2,
-2
+3,
+3,
+1
 );
 
 -- selected DownloadFile scripts
