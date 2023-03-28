@@ -1,15 +1,16 @@
-DELIMITER $$
+
 DROP PROCEDURE IF EXISTS SEARCHID;
+DELIMITER $$
 CREATE PROCEDURE SEARCHID(
-IN id INT
+IN id INTEGER
 )
 BEGIN
 	SELECT  DF_URL,
-			DF_Name ,
+			DF_Name,
             DF_Description,
             DF_FileLength ,
             DF_STATUS ,
-            FT_Type ,
+            FT_Name ,
             C_Name,
             C_FileOutputPath
     FROM DownloadFile AS df 
@@ -23,4 +24,4 @@ BEGIN
 END $$
 DELIMITER ;
 
-call SEARCHID(1);
+CALL SEARCHID(1);
