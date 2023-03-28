@@ -3,10 +3,11 @@ package com.mflq.downloader.model;
 import java.math.BigDecimal;
 
 import org.springframework.beans.factory.annotation.Value;
+
 public interface DownloadFileProjection {
 
 	@Value("#{target.DF_URL}")
-	String getUrl();
+	String getDownloadFileUrl();
 
 	@Value("#{target.DF_Name}")
 	String getDownloadFileName();
@@ -16,20 +17,17 @@ public interface DownloadFileProjection {
 
 	@Value("#{target.DF_STATUS}")
 	boolean getDownloadFilestatus();
-	
-	@Value("#{target.DF_Description}")
-	String 	getDownloadFileDescription();
 
-	@Value("#{target.FT_Type}")
-	String getFileType();
+	@Value("#{target.DF_Description}")
+	String getDownloadFileDescription();
+
+	@Value("#{target.FT_Name}")
+	String getFileTypeName();
 
 	@Value("#{target.C_Name}")
-	String getCategory();
+	String getCategoryName();
 
 	@Value("#{target.C_FileOutputPath}")
 	String getCategoryFileOutputPath();
-	
-	
-
 
 }

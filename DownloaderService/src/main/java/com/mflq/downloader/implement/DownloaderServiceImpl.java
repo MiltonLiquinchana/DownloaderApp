@@ -7,7 +7,6 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Path;
-import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -44,7 +43,7 @@ public class DownloaderServiceImpl implements DownloaderService {
 
 	/* metodo para crear clientes stomp, para cada descarga */
 	private MyStompSessionHandler createMyStompSessionHandler(DownloadRequest downloadRequest) {
-		log.debug("Creando cliente Stomp createMyStompSessionHandler");
+		log.info("Creando cliente Stomp createMyStompSessionHandler");
 
 		/* Creamos un nuevo cliente WebSocketClient */
 		WebSocketClient client = new StandardWebSocketClient();
@@ -79,21 +78,18 @@ public class DownloaderServiceImpl implements DownloaderService {
 
 	@Override
 	public DownloadContructorResponse downloadContructor(DownloadContructorRequest downloadContructorRequest) {
-
-		DownloadFileProjection downloadFileProjection = downloadFileRepository.getDownloadFileById(1);
+		DownloadFileProjection obj = downloadFileRepository.getDownloadFileById(1);
+		System.out.println(obj);
+//		DownloadFileProjection downloadFileProjection = downloadFileRepository.getDownloadFileById(1);
 		/* Creamos un Objeto */
-		return new DownloadContructorResponse(downloadFileProjection.getUrl(),
-				downloadFileProjection.getDownloadFileName(), downloadFileProjection.getDownloadFileLength(),
-				downloadFileProjection.getDownloadFileDescription(), downloadFileProjection.getDownloadFilestatus(),
-				downloadFileProjection.getFileType(), downloadFileProjection.getCategory(),
-				downloadFileProjection.getCategoryFileOutputPath(), new ArrayList<>());
+		return new DownloadContructorResponse();
 	}
 
 	@Override
 	public void downLoadFile(Path path, URLConnection urlConnection, long localFileSize,
 			DownloadRequest downloadRequest) {
-		log.debug("Download initialize, {}", path.getFileName());
-		
+		log.info("Download initialize, {}", path.getFileName());
+
 		MyStompSessionHandler myStompSessionHandler = createMyStompSessionHandler(downloadRequest);
 		try (ReadableByteChannel rbc = new RBCWrapper(Channels.newChannel(urlConnection.getInputStream()),
 				localFileSize, (urlConnection.getContentLength() + localFileSize), this, myStompSessionHandler,
