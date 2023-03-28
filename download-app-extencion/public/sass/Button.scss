@@ -1,0 +1,24 @@
+#downloadAppButtonContainer {
+    position: absolute !important;
+    z-index: 999999 !important;
+    right: 0px;
+
+    .downloadAppBtn {
+        .downloadBtn {
+            background-color: red;
+        }
+
+        .downloadQualityList {
+            background-color: red;
+            opacity: 0;
+            visibility: hidden;
+            transition: visibility 0.3s linear 0.4s;
+        }
+
+        .show {
+            opacity: 1;
+            visibility: visible;
+            transition: 0s;
+        }
+    }
+}
