@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: servicio-downloader
+          uri: lb://servicio-downloader
+          predicates:
+            - Path=/downloaderapp/**
+          #ponemos esto por que el path esta compuesto de dos elementos(api, downloader)
+          filters:
+            - StripPrefix=1
