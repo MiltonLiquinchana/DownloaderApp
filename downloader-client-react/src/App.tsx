@@ -5,8 +5,10 @@ function App() {
 
 	return (
 		<div>
-			<DownloaderFileInfoComponent />
+			{/* <DownloaderFileInfoComponent /> */}
+
 			<DownloaderComponent clientName="stompClient" />
+			<DownloaderComponent clientName="stomp" />
 		</div>
 	);
 
