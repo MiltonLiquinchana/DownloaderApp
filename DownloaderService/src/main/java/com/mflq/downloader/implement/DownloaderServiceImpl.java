@@ -1,12 +1,8 @@
 package com.mflq.downloader.implement;
 
-import com.mflq.downloader.dto.DownloadContructorRequest;
-import com.mflq.downloader.dto.DownloadContructorResponse;
 import com.mflq.downloader.dto.DownloadRequest;
 import com.mflq.downloader.dto.DownloadResponse;
 import com.mflq.downloader.handler.MyStompSessionHandler;
-import com.mflq.downloader.model.DownloadFileProjection;
-import com.mflq.downloader.repository.DownloadFileRepository;
 import com.mflq.downloader.service.DownloaderService;
 import com.mflq.downloader.service.ProgressCallBackService;
 import com.mflq.downloader.util.RBCWrapper;
@@ -35,10 +31,6 @@ public class DownloaderServiceImpl implements DownloaderService {
     @Autowired
     private ProgressCallBackService progressCallBackService;
 
-    /* Creamos una referencia hacia el repositorio de datos */
-    @Autowired
-    private DownloadFileRepository downloadFileRepository;
-
     /* metodo para crear clientes stomp, para cada descarga */
     private MyStompSessionHandler createMyStompSessionHandler(DownloadRequest downloadRequest) {
         log.info("Creando cliente Stomp createMyStompSessionHandler");
@@ -56,7 +48,7 @@ public class DownloaderServiceImpl implements DownloaderService {
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
         /* URL del servidor websocket */
-        String url = "ws://localhost:8080/ws";
+        String url = "ws://localhost:8083/ws";
 
         /* Creamos un nuevo manejador de sesiones con el nombre del archivo */
         MyStompSessionHandler myStompSessionHandler = new MyStompSessionHandler(downloadRequest.getFileName());
@@ -72,15 +64,6 @@ public class DownloaderServiceImpl implements DownloaderService {
         /* Retornamos la intancia del cliente stomp */
         return myStompSessionHandler;
 
-    }
-
-    @Override
-    public DownloadContructorResponse downloadContructor(DownloadContructorRequest downloadContructorRequest) {
-        DownloadFileProjection obj = downloadFileRepository.getDownloadFileById(1);
-        System.out.println(obj);
-//		DownloadFileProjection downloadFileProjection = downloadFileRepository.getDownloadFileById(1);
-        /* Creamos un Objeto */
-        return new DownloadContructorResponse();
     }
 
     @Override

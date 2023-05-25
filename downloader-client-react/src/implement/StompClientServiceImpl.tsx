@@ -21,7 +21,7 @@ export default class StompClientServiceImpl implements StompClientService {
 	connect(myUser: string): void {
 
 		/** Creamos una instancia de Websocket, también se podría con stomp u otros */
-		this.client = webstomp.over(new WebSocket('ws://localhost:8080/ws'));
+		this.client = webstomp.over(new WebSocket('ws://localhost:8083/ws'));
 
 		/** Realizamos la conexión al servidor */
 		this.client.connect(

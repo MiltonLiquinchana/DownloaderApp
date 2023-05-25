@@ -1,4 +1,4 @@
-package com.mflq.downloader.configuration;
+package com.mflq.datagateway.configuration;
 
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;

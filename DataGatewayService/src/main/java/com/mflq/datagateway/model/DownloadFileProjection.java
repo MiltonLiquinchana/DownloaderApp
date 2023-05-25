@@ -1,8 +1,8 @@
-package com.mflq.downloader.model;
-
-import java.math.BigDecimal;
+package com.mflq.datagateway.model;
 
 import org.springframework.beans.factory.annotation.Value;
+
+import java.math.BigDecimal;
 
 public interface DownloadFileProjection {
 

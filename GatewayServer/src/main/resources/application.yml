@@ -2,8 +2,15 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: servicio-downloader
-          uri: lb://servicio-downloader
+        - id: downloader-service
+          uri: lb://downloader-service
+          predicates:
+            - Path=/downloaderapp/**
+          #ponemos esto por que el path esta compuesto de dos elementos(api, downloader)
+          filters:
+            - StripPrefix=1
+        - id: datagateway-service
+          uri: lb://datagateway-service
           predicates:
             - Path=/downloaderapp/**
           #ponemos esto por que el path esta compuesto de dos elementos(api, downloader)
