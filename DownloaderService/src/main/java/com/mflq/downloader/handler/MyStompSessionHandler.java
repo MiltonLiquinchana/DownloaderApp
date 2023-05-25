@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 @Log4j2
 public class MyStompSessionHandler extends StompSessionHandlerAdapter {
     private StompSession session;
-    private String downloadClientName;
+    private final String downloadClientName;
 
     public MyStompSessionHandler(String downloadClientName) {
         this.downloadClientName = downloadClientName;
