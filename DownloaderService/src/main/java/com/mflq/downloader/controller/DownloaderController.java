@@ -23,73 +23,77 @@ import com.mflq.downloader.service.DownloaderService;
 
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Controlador REST para manejar las operaciones de descarga de archivos.
+ * Proporciona endpoints para iniciar descargas con capacidad de reanudación.
+ *
+ * @author MFLQ
+ * @version 1.0
+ */
 @Log4j2
 @RestController
 @RequestMapping("downloader")
 public class DownloaderController {
+
+	/**
+	 * Servicio encargado de la lógica de descarga de archivos.
+	 */
 	@Autowired
 	private DownloaderService downloaderService;
 
+	/**
+	 * Endpoint para iniciar la descarga de un archivo desde una URL específica.
+	 * Soporta reanudación de descargas parciales mediante HTTP Range requests.
+	 *
+	 * @param downloadRequest Objeto que contiene la URL del archivo, ruta de destino y nombre del archivo
+	 * @return String con el estado de la operación (descarga iniciada o archivo ya existe)
+	 * @throws IOException Si ocurre un error de E/O durante la creación del archivo o conexión
+	 * @throws URISyntaxException Si la URL proporcionada tiene un formato inválido
+	 */
 	@PostMapping("download")
 	public String downloadStart(@RequestBody DownloadRequest downloadRequest) throws IOException, URISyntaxException {
-		/* Generamos un objeto URL con la url que recivimos */
+
+		// Crea un objeto URL a partir de la cadena de texto recibida en la petición
 		URL url = new URL(downloadRequest.getUrlRequest());
-		/* Abrimos una conexion */
+
+		// Establece la conexión inicial con el servidor remoto para obtener metadatos del archivo
 		URLConnection connection = url.openConnection();
 
-		/*
-		 * Creamos un nuevo path con la ruta de guardado y el nombre del archivo a
-		 * descargar
-		 */
+
+		// Construye la ruta completa del archivo local combinando el directorio de destino y el nombre del archivo
 		Path path = Path.of(downloadRequest.getFileOutputPath(), downloadRequest.getFileName());
 
-		/*
-		 * Variable para saber el tamaño del archivo local, en caso de ser necesario
-		 * reanudar descarga
-		 */
+		// Inicializa el contador de bytes del archivo local (usado para descargas parciales)
 		long localFileSize = 0;
 
-		/* Validamos la existencia de la ruta */
+		// Verifica si el archivo ya existe en el sistema de archivos local
 		if (Files.exists(path)) {
-			/* Si la ruta existe obtiene el tamaño actual del archivo local */
+			// Si existe, obtiene el tamaño actual para determinar cuántos bytes faltan por descargar
 			localFileSize = Files.size(path);
 		} else {
-			/* crea el archivo */
+			// Si no existe, crea un nuevo archivo vacío en la ruta especificada
 			Files.createFile(path);
 		}
 
-		/* Valida el tamaño del archivo local */
+		// Compara el tamaño del archivo local con el tamaño del archivo remoto
 		if (localFileSize == connection.getContentLength()) {
-			/*
-			 * Si el tamaño del archivo local y el archivo online son los mismo, retorna un
-			 * mensaje archivo ya descargado
-			 */
-			log.warn("El archivo ya fue descargado");
+			// Si los tamaños coinciden, la descarga ya está completa
+			log.warn("El archivo '{}' ya fue descargado completamente", downloadRequest.getFileName());
 			return "El archivo ya fue descargado";
-
 		}
 
-		/*
-		 * En caso de que el tamaño del archivo local sea diferente(menor) al del
-		 * archivo online, nuevamente abre la conexion
-		 */
+		// Restablece la conexión para configurar la descarga parcial
+		// (necesario porque ya se consumió la conexión anterior para obtener metadatos)
 		connection = url.openConnection();
 
-		/* Agrega un rango de bytes desde el cual comezar a descargar */
+		// Configura el header HTTP Range para solicitar solo los bytes faltantes
+		// Esto permite reanudar descargas interrumpidas desde el punto donde se quedaron
 		connection.setRequestProperty("Range", "bytes=" + localFileSize + "-");
 
-		/* Iniciamos la descarga */
+		// Delega la lógica de descarga al servicio especializado
 		downloaderService.downLoadFile(path, connection, localFileSize, downloadRequest);
 
-		/* retorna un mensaje de que se ha iniciado la descarga */
+		// Confirma que el proceso de descarga ha comenzado exitosamente
 		return "Descarga iniciada";
 	}
-
-	@GetMapping("contructDownload")
-	public ResponseEntity<DownloadContructorResponse> constructDownload(
-			@RequestBody DownloadContructorRequest downloadContructorRequest) {
-
-		return new ResponseEntity<>(downloaderService.downloadContructor(downloadContructorRequest), HttpStatus.OK);
-	}
-
 }

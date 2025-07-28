@@ -7,7 +7,7 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 
-import com.mflq.downloader.dto.DownloadResponse;
+import com.mflq.downloader.dto.DownloadWebSocketMessage;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -43,18 +43,18 @@ public class MyStompSessionHandler extends StompSessionHandlerAdapter {
 		log.debug("Estableciendo typos de mensajes salientes getPayloadType");
 
 		/* Por el momento el mensaje es de tipo DownloadResponse.class */
-		return DownloadResponse.class;
+		return DownloadWebSocketMessage.class;
 	}
 
 	/* Este metodo maneja los mensajes recividos */
 	@Override
 	public void handleFrame(StompHeaders headers, Object payload) {
-		DownloadResponse msg = (DownloadResponse) payload;
+		DownloadWebSocketMessage msg = (DownloadWebSocketMessage) payload;
 		log.debug("Mensaje recivido: {}", msg);
 	}
 
-	public void sendMessage(DownloadResponse downloadResponse) {
+	public void sendMessage(DownloadWebSocketMessage downloadWebSocketMessage) {
 		log.debug("Notificando al cliente");
-		this.session.send("/app/message", downloadResponse);
+		this.session.send("/app/message", downloadWebSocketMessage);
 	}
 }

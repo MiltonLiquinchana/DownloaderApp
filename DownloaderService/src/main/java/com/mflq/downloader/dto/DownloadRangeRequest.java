@@ -7,12 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class DownloadResponse {
-    private String from;
-    private String to;
-    private long sizeRead;
-    private double progress;
-
+@NoArgsConstructor
+public class DownloadRangeRequest {
+    private long startByte;
+    private long endByte;
 }
